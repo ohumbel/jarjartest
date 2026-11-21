@@ -16,7 +16,7 @@
                 <pathelement path="lib/asm-util-9.11.1.jar" />
             </classpath>
         </taskdef>
-        <!-- produce the big shadowed jar using jarjar -->
+        <!-- produce a shadowed jar using jarjar -->
         <jarjar destfile="deployment/result.jar">
             <zipfileset src="lib/jline-4.7.0.jar"/>
             <rule pattern="org.jline.**" result="st.extreme.jline.@1"/>
