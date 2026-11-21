@@ -17,7 +17,7 @@
             </classpath>
         </taskdef>
         <!-- produce a shadowed jar using jarjar -->
-        <jarjar destfile="deployment/result.jar">
+        <jarjar destfile="deployment/result.jar" filesonly="true">
             <zipfileset src="lib/jline-4.7.0.jar"/>
             <rule pattern="org.jline.**" result="st.extreme.jline.@1"/>
         </jarjar>
