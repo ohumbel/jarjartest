@@ -207,7 +207,18 @@
 
     <target name="verify-compress" depends="verify-commons-compress"/>
 
+    <target name="verify-calling-commons-compress" depends="jar-repackage">
+        <taskdef name="verify-commons-compress-caller" classname="st.extreme.anttasks.VerifyCommonsCompressCallerTask">
+            <classpath refid="anttasks.classpath"/>
+        </taskdef>
+        <verify-commons-compress-caller jarfile="deployment/result.jar" classname="st.extreme.calling.CommonsCompress"/>
+    </target>
+
+    <target name="verify-commons-compress-caller" depends="verify-calling-commons-compress"/>
+    <target name="verify-calling-compress" depends="verify-calling-commons-compress"/>
+    <target name="verify-compress-caller" depends="verify-calling-commons-compress"/>
+
     <!-- No calling bouncycastle verification (only a _sslcerts.py file in jython does the import) -->
-    <target name="verify" depends="verify-unmodified, verify-antlr, verify-calling-antlr, verify-bouncycastle, verify-commons-compress"/>
+    <target name="verify" depends="verify-unmodified, verify-antlr, verify-calling-antlr, verify-bouncycastle, verify-commons-compress, verify-calling-commons-compress"/>
 
 </project>
