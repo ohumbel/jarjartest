@@ -1,12 +1,80 @@
 <project name="jarjartest" default="jar-repackage" basedir=".">
 
+    <property name="src.main.dir" location="src/main/java"/>
+    <property name="src.main.resources.dir" location="src/main/resources"/>
+    <property name="src.test.dir" location="src/test/java"/>
+    <property name="src.test.resources.dir" location="src/test/resources"/>
+    <property name="lib.dir" location="lib"/>
+    <property name="build.dir" location="build"/>
+    <property name="build.classes.dir" location="${build.dir}/classes"/>
+    <property name="build.test-classes.dir" location="${build.dir}/test-classes"/>
+    <property name="build.test-reports.dir" location="${build.dir}/test-reports"/>
+    <property name="deployment.dir" location="deployment"/>
+
+    <path id="compile.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
     <target name="clean">
+        <delete dir="${build.dir}" />
         <delete includeemptydirs="true" failonerror="false">
-            <fileset dir="deployment" includes="**/*" defaultexcludes="false" />
+            <fileset dir="${deployment.dir}" includes="**/*" defaultexcludes="false" />
         </delete>
     </target>
 
-    <target name="jar-repackage">
+    <target name="compile">
+        <mkdir dir="${build.classes.dir}"/>
+        <javac srcdir="${src.main.dir}" destdir="${build.classes.dir}" includeantruntime="false" debug="true">
+            <classpath refid="compile.classpath"/>
+        </javac>
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${src.main.resources.dir}" erroronmissingdir="false">
+                <exclude name="**/.gitkeep"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile-test" depends="compile">
+        <mkdir dir="${build.test-classes.dir}"/>
+        <javac srcdir="${src.test.dir}" destdir="${build.test-classes.dir}" includeantruntime="false" debug="true">
+            <classpath>
+                <pathelement location="${build.classes.dir}"/>
+                <path refid="compile.classpath"/>
+            </classpath>
+        </javac>
+        <copy todir="${build.test-classes.dir}">
+            <fileset dir="${src.test.resources.dir}" erroronmissingdir="false">
+                <exclude name="**/.gitkeep"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="test" depends="compile-test">
+        <mkdir dir="${build.test-reports.dir}"/>
+        <junitlauncher printSummary="true" haltOnFailure="true">
+            <classpath>
+                <pathelement location="${build.classes.dir}"/>
+                <pathelement location="${build.test-classes.dir}"/>
+                <path refid="compile.classpath"/>
+            </classpath>
+            <testclasses outputdir="${build.test-reports.dir}">
+                <fileset dir="${build.test-classes.dir}">
+                    <include name="**/*Test.class"/>
+                </fileset>
+                <listener type="legacy-brief" sendSysOut="true"/>
+                <listener type="legacy-xml" sendSysOut="true"/>
+            </testclasses>
+        </junitlauncher>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${deployment.dir}"/>
+        <jar destfile="${deployment.dir}/stextreme.jar" basedir="${build.classes.dir}"/>
+    </target>
+
+    <target name="jar-repackage" depends="jar">
         <taskdef name="jarjar" classname="com.eed3si9n.jarjar.JarJarTask">
             <classpath>
                 <pathelement path="lib/ant-jarjar-1.18.1.jar" />
@@ -18,6 +86,7 @@
         </taskdef>
         <!-- produce a shadowed jar using jarjar -->
         <jarjar destfile="deployment/result.jar" filesonly="true">
+            <zipfileset src="deployment/stextreme.jar"/>
             <zipfileset src="lib/jline-4.7.0.jar"/>
             <!-- rule pattern="org.jline.**" result="st.extreme.jline.@1" -->
         </jarjar>
