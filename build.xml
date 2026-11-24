@@ -96,6 +96,9 @@
             <zipfileset src="deployment/stextreme.jar"/>
             <zipfileset src="lib/antlr-runtime-3.5.3.jar"/>
             <rule pattern="org.antlr.runtime.**" result="st.extreme.antlr.runtime.@1"/>
+            <zipfileset src="lib/bcpkix-jdk18on-1.87.jar" excludes="META-INF/**"/>
+            <zipfileset src="lib/bcprov-jdk18on-1.87.jar" excludes="META-INF/**"/>
+            <rule pattern="org.bouncycastle.**" result="st.extreme.bouncycastle.@1"/>
             <zipfileset src="lib/jline-4.7.0.jar"/>
         </jarjar>
     </target>
@@ -142,6 +145,35 @@
     <target name="verify-antlr-caller" depends="verify-calling-antlr"/>
     <target name="verify-caller" depends="verify-calling-antlr"/>
 
-    <target name="verify" depends="verify-unmodified, verify-antlr, verify-calling-antlr"/>
+    <target name="verify-bouncycastle" depends="jar-repackage">
+        <fail message="Verification failed: Bouncy Castle classes were not found in package st.extreme.bouncycastle in deployment/result.jar">
+            <condition>
+                <not>
+                    <and>
+                        <available classname="st.extreme.bouncycastle.jce.provider.BouncyCastleProvider" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.bouncycastle.crypto.Digest" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.bouncycastle.asn1.ASN1Object" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.bouncycastle.cert.X509CertificateHolder" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.bouncycastle.cms.CMSSignedData" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.bouncycastle.pkcs.PKCS10CertificationRequest" classpath="deployment/result.jar"/>
+                    </and>
+                </not>
+            </condition>
+        </fail>
+        <fail message="Verification failed: Bouncy Castle classes were still found in package org.bouncycastle in deployment/result.jar">
+            <condition>
+                <or>
+                    <available classname="org.bouncycastle.jce.provider.BouncyCastleProvider" classpath="deployment/result.jar"/>
+                    <available classname="org.bouncycastle.crypto.Digest" classpath="deployment/result.jar"/>
+                    <available classname="org.bouncycastle.asn1.ASN1Object" classpath="deployment/result.jar"/>
+                    <available classname="org.bouncycastle.cert.X509CertificateHolder" classpath="deployment/result.jar"/>
+                    <available classname="org.bouncycastle.cms.CMSSignedData" classpath="deployment/result.jar"/>
+                    <available classname="org.bouncycastle.pkcs.PKCS10CertificationRequest" classpath="deployment/result.jar"/>
+                </or>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="verify" depends="verify-unmodified, verify-antlr, verify-calling-antlr, verify-bouncycastle"/>
 
 </project>
