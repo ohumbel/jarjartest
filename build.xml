@@ -135,17 +135,11 @@
                 </or>
             </condition>
         </fail>
-    </target>
-
-    <target name="verify-calling-antlr" depends="jar-repackage">
         <taskdef name="verify-antlr-caller" classname="st.extreme.anttasks.VerifyAntlrCallerTask">
             <classpath refid="anttasks.classpath"/>
         </taskdef>
         <verify-antlr-caller jarfile="deployment/result.jar" classname="st.extreme.calling.Antlr"/>
     </target>
-
-    <target name="verify-antlr-caller" depends="verify-calling-antlr"/>
-    <target name="verify-caller" depends="verify-calling-antlr"/>
 
     <target name="verify-bouncycastle" depends="jar-repackage">
         <fail message="Verification failed: Bouncy Castle classes were not found in package st.extreme.bouncycastle in deployment/result.jar">
@@ -176,8 +170,6 @@
         </fail>
     </target>
 
-    <target name="verify-bc" depends="verify-bouncycastle"/>
-
     <target name="verify-commons-compress" depends="jar-repackage">
         <fail message="Verification failed: Apache Commons Compress classes were not found in package st.extreme.apache.commons.compress in deployment/result.jar">
             <condition>
@@ -203,22 +195,13 @@
                 </or>
             </condition>
         </fail>
-    </target>
-
-    <target name="verify-compress" depends="verify-commons-compress"/>
-
-    <target name="verify-calling-commons-compress" depends="jar-repackage">
         <taskdef name="verify-commons-compress-caller" classname="st.extreme.anttasks.VerifyCommonsCompressCallerTask">
             <classpath refid="anttasks.classpath"/>
         </taskdef>
         <verify-commons-compress-caller jarfile="deployment/result.jar" classname="st.extreme.calling.CommonsCompress"/>
     </target>
 
-    <target name="verify-commons-compress-caller" depends="verify-calling-commons-compress"/>
-    <target name="verify-calling-compress" depends="verify-calling-commons-compress"/>
-    <target name="verify-compress-caller" depends="verify-calling-commons-compress"/>
-
     <!-- No calling bouncycastle verification (only a _sslcerts.py file in jython does the import) -->
-    <target name="verify" depends="verify-unmodified, verify-antlr, verify-calling-antlr, verify-bouncycastle, verify-commons-compress, verify-calling-commons-compress"/>
+    <target name="verify" depends="verify-unmodified, verify-antlr, verify-bouncycastle, verify-commons-compress"/>
 
 </project>
