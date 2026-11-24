@@ -176,7 +176,38 @@
         </fail>
     </target>
 
+    <target name="verify-bc" depends="verify-bouncycastle"/>
+
+    <target name="verify-commons-compress" depends="jar-repackage">
+        <fail message="Verification failed: Apache Commons Compress classes were not found in package st.extreme.apache.commons.compress in deployment/result.jar">
+            <condition>
+                <not>
+                    <and>
+                        <available classname="st.extreme.apache.commons.compress.archivers.ArchiveEntry" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.apache.commons.compress.archivers.ArchiveStreamFactory" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.apache.commons.compress.archivers.zip.ZipArchiveEntry" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.apache.commons.compress.archivers.tar.TarArchiveEntry" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.apache.commons.compress.compressors.CompressorStreamFactory" classpath="deployment/result.jar"/>
+                    </and>
+                </not>
+            </condition>
+        </fail>
+        <fail message="Verification failed: Apache Commons Compress classes were still found in package org.apache.commons.compress in deployment/result.jar">
+            <condition>
+                <or>
+                    <available classname="org.apache.commons.compress.archivers.ArchiveEntry" classpath="deployment/result.jar"/>
+                    <available classname="org.apache.commons.compress.archivers.ArchiveStreamFactory" classpath="deployment/result.jar"/>
+                    <available classname="org.apache.commons.compress.archivers.zip.ZipArchiveEntry" classpath="deployment/result.jar"/>
+                    <available classname="org.apache.commons.compress.archivers.tar.TarArchiveEntry" classpath="deployment/result.jar"/>
+                    <available classname="org.apache.commons.compress.compressors.CompressorStreamFactory" classpath="deployment/result.jar"/>
+                </or>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="verify-compress" depends="verify-commons-compress"/>
+
     <!-- No calling bouncycastle verification (only a _sslcerts.py file in jython does the import) -->
-    <target name="verify" depends="verify-unmodified, verify-antlr, verify-calling-antlr, verify-bouncycastle"/>
+    <target name="verify" depends="verify-unmodified, verify-antlr, verify-calling-antlr, verify-bouncycastle, verify-commons-compress"/>
 
 </project>
