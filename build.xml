@@ -92,4 +92,16 @@
         </jarjar>
     </target>
 
+    <target name="verify-unmodified" depends="jar-repackage">
+        <fail message="Verification failed: Unmodified class was not found in package st.extreme.initial in deployment/result.jar">
+            <condition>
+                <not>
+                    <available classname="st.extreme.initial.Unmodified" classpath="deployment/result.jar"/>
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="verify" depends="verify-unmodified"/>
+
 </project>
