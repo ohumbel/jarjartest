@@ -99,6 +99,8 @@
             <zipfileset src="lib/bcpkix-jdk18on-1.87.jar" excludes="META-INF/**"/>
             <zipfileset src="lib/bcprov-jdk18on-1.87.jar" excludes="META-INF/**"/>
             <rule pattern="org.bouncycastle.**" result="st.extreme.bouncycastle.@1"/>
+            <zipfileset src="lib/commons-compress-1.28.0.jar" excludes="META-INF/versions/9/module-info.class"/>
+            <rule pattern="org.apache.commons.compress.**" result="st.extreme.apache.commons.compress.@1"/>
             <zipfileset src="lib/jline-4.7.0.jar"/>
         </jarjar>
     </target>
