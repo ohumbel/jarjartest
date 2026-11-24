@@ -103,6 +103,28 @@
         </fail>
     </target>
 
-    <target name="verify" depends="verify-unmodified"/>
+    <target name="verify-antlr" depends="jar-repackage">
+        <fail message="Verification failed: ANTLR runtime classes were not found in package st.extreme.antlr.runtime in deployment/result.jar">
+            <condition>
+                <not>
+                    <and>
+                        <available classname="st.extreme.antlr.runtime.Parser" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.antlr.runtime.Lexer" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.antlr.runtime.tree.CommonTree" classpath="deployment/result.jar"/>
+                    </and>
+                </not>
+            </condition>
+        </fail>
+        <fail message="Verification failed: ANTLR runtime classes were still found in package org.antlr.runtime in deployment/result.jar">
+            <condition>
+                <or>
+                    <available classname="org.antlr.runtime.Parser" classpath="deployment/result.jar"/>
+                    <available classname="org.antlr.runtime.Lexer" classpath="deployment/result.jar"/>
+                </or>
+            </condition>
+        </fail>
+    </target>
+
+    <target name="verify" depends="verify-unmodified, verify-antlr"/>
 
 </project>
