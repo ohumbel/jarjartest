@@ -17,6 +17,13 @@
         </fileset>
     </path>
 
+    <path id="anttasks.classpath">
+        <pathelement location="${build.classes.dir}"/>
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
     <target name="clean">
         <delete dir="${build.dir}" />
         <delete includeemptydirs="true" failonerror="false">
@@ -26,7 +33,7 @@
 
     <target name="compile">
         <mkdir dir="${build.classes.dir}"/>
-        <javac srcdir="${src.main.dir}" destdir="${build.classes.dir}" includeantruntime="false" debug="true">
+        <javac srcdir="${src.main.dir}" destdir="${build.classes.dir}" includeantruntime="true" debug="true">
             <classpath refid="compile.classpath"/>
         </javac>
         <copy todir="${build.classes.dir}">
@@ -38,7 +45,7 @@
 
     <target name="compile-test" depends="compile">
         <mkdir dir="${build.test-classes.dir}"/>
-        <javac srcdir="${src.test.dir}" destdir="${build.test-classes.dir}" includeantruntime="false" debug="true">
+        <javac srcdir="${src.test.dir}" destdir="${build.test-classes.dir}" includeantruntime="true" debug="true">
             <classpath>
                 <pathelement location="${build.classes.dir}"/>
                 <path refid="compile.classpath"/>
@@ -51,7 +58,7 @@
         </copy>
     </target>
 
-    <target name="test" depends="compile-test">
+    <target name="test" depends="compile-test, jar-repackage">
         <mkdir dir="${build.test-reports.dir}"/>
         <junitlauncher printSummary="true" haltOnFailure="true">
             <classpath>
@@ -125,6 +132,16 @@
         </fail>
     </target>
 
-    <target name="verify" depends="verify-unmodified, verify-antlr"/>
+    <target name="verify-calling-antlr" depends="jar-repackage">
+        <taskdef name="verify-antlr-caller" classname="st.extreme.anttasks.VerifyAntlrCallerTask">
+            <classpath refid="anttasks.classpath"/>
+        </taskdef>
+        <verify-antlr-caller jarfile="deployment/result.jar" classname="st.extreme.calling.Antlr"/>
+    </target>
+
+    <target name="verify-antlr-caller" depends="verify-calling-antlr"/>
+    <target name="verify-caller" depends="verify-calling-antlr"/>
+
+    <target name="verify" depends="verify-unmodified, verify-antlr, verify-calling-antlr"/>
 
 </project>
