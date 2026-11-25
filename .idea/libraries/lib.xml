@@ -1,0 +1,28 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/bcpkix-jdk18on-1.87.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/antlr-runtime-3.5.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/byte-buddy-1.17.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jline-4.7.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jarjar-1.18.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-compress-1.28.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-jupiter-engine-6.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/asm-9.11.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/ant-jarjar-1.18.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/asm-commons-9.11.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/apiguardian-api-1.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/ant-1.10.18.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-platform-launcher-6.1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-platform-commons-6.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/assertj-core-3.27.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-jupiter-api-6.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/bcprov-jdk18on-1.87.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/asm-util-9.11.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-platform-engine-6.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/opentest4j-1.3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
