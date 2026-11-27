@@ -274,6 +274,37 @@
         <verify-google-caller jarfile="deployment/result.jar" classname="st.extreme.calling.Google"/>
     </target>
 
-    <target name="verify" depends="verify-unmodified, verify-antlr, verify-bouncycastle, verify-commons-compress, verify-commons-io, verify-google"/>
+    <target name="verify-icu" depends="jar-repackage">
+        <fail message="Verification failed: ICU classes were not found in package st.extreme.icu in deployment/result.jar">
+            <condition>
+                <not>
+                    <and>
+                        <available classname="st.extreme.icu.text.StringPrep" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.icu.text.DateFormat" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.icu.util.ULocale" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.icu.util.Calendar" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.icu.util.TimeZone" classpath="deployment/result.jar"/>
+                    </and>
+                </not>
+            </condition>
+        </fail>
+        <fail message="Verification failed: ICU classes were still found in package com.ibm.icu in deployment/result.jar">
+            <condition>
+                <or>
+                    <available classname="com.ibm.icu.text.StringPrep" classpath="deployment/result.jar"/>
+                    <available classname="com.ibm.icu.text.DateFormat" classpath="deployment/result.jar"/>
+                    <available classname="com.ibm.icu.util.ULocale" classpath="deployment/result.jar"/>
+                    <available classname="com.ibm.icu.util.Calendar" classpath="deployment/result.jar"/>
+                    <available classname="com.ibm.icu.util.TimeZone" classpath="deployment/result.jar"/>
+                </or>
+            </condition>
+        </fail>
+        <taskdef name="verify-icu-caller" classname="st.extreme.anttasks.VerifyIcuCallerTask">
+            <classpath refid="anttasks.classpath"/>
+        </taskdef>
+        <verify-icu-caller jarfile="deployment/result.jar" classname="st.extreme.calling.Icu"/>
+    </target>
+
+    <target name="verify" depends="verify-unmodified, verify-antlr, verify-bouncycastle, verify-commons-compress, verify-commons-io, verify-google, verify-icu"/>
 
 </project>
