@@ -22,6 +22,8 @@
       <root url="jar://$PROJECT_DIR$/lib/junit-platform-engine-6.0.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/opentest4j-1.3.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/commons-io-2.22.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/failureaccess-1.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/guava-33.8.0-jre.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
