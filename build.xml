@@ -203,7 +203,38 @@
         <verify-commons-compress-caller jarfile="deployment/result.jar" classname="st.extreme.calling.CommonsCompress"/>
     </target>
 
+    <target name="verify-commons-io" depends="jar-repackage">
+        <fail message="Verification failed: Apache Commons IO classes were not found in package st.extreme.apache.commons.io in deployment/result.jar">
+            <condition>
+                <not>
+                    <and>
+                        <available classname="st.extreme.apache.commons.io.IOUtils" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.apache.commons.io.FileUtils" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.apache.commons.io.FilenameUtils" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.apache.commons.io.input.AutoCloseInputStream" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.apache.commons.io.output.ByteArrayOutputStream" classpath="deployment/result.jar"/>
+                    </and>
+                </not>
+            </condition>
+        </fail>
+        <fail message="Verification failed: Apache Commons IO classes were still found in package org.apache.commons.io in deployment/result.jar">
+            <condition>
+                <or>
+                    <available classname="org.apache.commons.io.IOUtils" classpath="deployment/result.jar"/>
+                    <available classname="org.apache.commons.io.FileUtils" classpath="deployment/result.jar"/>
+                    <available classname="org.apache.commons.io.FilenameUtils" classpath="deployment/result.jar"/>
+                    <available classname="org.apache.commons.io.input.AutoCloseInputStream" classpath="deployment/result.jar"/>
+                    <available classname="org.apache.commons.io.output.ByteArrayOutputStream" classpath="deployment/result.jar"/>
+                </or>
+            </condition>
+        </fail>
+        <taskdef name="verify-commons-io-caller" classname="st.extreme.anttasks.VerifyCommonsIoCallerTask">
+            <classpath refid="anttasks.classpath"/>
+        </taskdef>
+        <verify-commons-io-caller jarfile="deployment/result.jar" classname="st.extreme.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream"/>
+    </target>
+
     <!-- No calling bouncycastle verification (only a _sslcerts.py file in jython does the import) -->
-    <target name="verify" depends="verify-unmodified, verify-antlr, verify-bouncycastle, verify-commons-compress"/>
+    <target name="verify" depends="verify-unmodified, verify-antlr, verify-bouncycastle, verify-commons-compress, verify-commons-io"/>
 
 </project>
