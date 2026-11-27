@@ -241,6 +241,37 @@
         <verify-commons-io-caller jarfile="deployment/result.jar" classname="st.extreme.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream"/>
     </target>
 
-    <target name="verify" depends="verify-unmodified, verify-antlr, verify-bouncycastle, verify-commons-compress, verify-commons-io"/>
+    <target name="verify-google" depends="jar-repackage">
+        <fail message="Verification failed: Google classes were not found in package st.extreme.google in deployment/result.jar">
+            <condition>
+                <not>
+                    <and>
+                        <available classname="st.extreme.google.common.util.concurrent.internal.InternalFutureFailureAccess" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.google.common.util.concurrent.internal.InternalFutures" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.google.common.base.CharMatcher" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.google.common.collect.ImmutableList" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.google.common.io.ByteStreams" classpath="deployment/result.jar"/>
+                    </and>
+                </not>
+            </condition>
+        </fail>
+        <fail message="Verification failed: Google classes were still found in package com.google in deployment/result.jar">
+            <condition>
+                <or>
+                    <available classname="com.google.common.util.concurrent.internal.InternalFutureFailureAccess" classpath="deployment/result.jar"/>
+                    <available classname="com.google.common.util.concurrent.internal.InternalFutures" classpath="deployment/result.jar"/>
+                    <available classname="com.google.common.base.CharMatcher" classpath="deployment/result.jar"/>
+                    <available classname="com.google.common.collect.ImmutableList" classpath="deployment/result.jar"/>
+                    <available classname="com.google.common.io.ByteStreams" classpath="deployment/result.jar"/>
+                </or>
+            </condition>
+        </fail>
+        <taskdef name="verify-google-caller" classname="st.extreme.anttasks.VerifyGoogleCallerTask">
+            <classpath refid="anttasks.classpath"/>
+        </taskdef>
+        <verify-google-caller jarfile="deployment/result.jar" classname="st.extreme.calling.Google"/>
+    </target>
+
+    <target name="verify" depends="verify-unmodified, verify-antlr, verify-bouncycastle, verify-commons-compress, verify-commons-io, verify-google"/>
 
 </project>
