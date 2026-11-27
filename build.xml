@@ -314,6 +314,38 @@
         <verify-icu-caller jarfile="deployment/result.jar" classname="st.extreme.calling.Icu"/>
     </target>
 
-    <target name="verify" depends="verify-unmodified, verify-antlr, verify-bouncycastle, verify-commons-compress, verify-commons-io, verify-google, verify-icu"/>
+    <target name="verify-netty" depends="jar-repackage">
+        <fail message="Verification failed: Netty classes were not found in package st.extreme.netty in deployment/result.jar">
+            <condition>
+                <not>
+                    <and>
+                        <available classname="st.extreme.netty.buffer.ByteBuf" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.netty.handler.codec.ByteToMessageDecoder" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.netty.util.HashedWheelTimer" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.netty.handler.ssl.SslHandler" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.netty.resolver.AddressResolver" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.netty.channel.Channel" classpath="deployment/result.jar"/>
+                        <available classname="st.extreme.netty.channel.unix.DomainSocketAddress" classpath="deployment/result.jar"/>
+                    </and>
+                </not>
+            </condition>
+        </fail>
+        <fail message="Verification failed: Netty classes were still found in package io.netty in deployment/result.jar">
+            <condition>
+                <or>
+                    <available classname="io.netty.buffer.ByteBuf" classpath="deployment/result.jar"/>
+                    <available classname="io.netty.handler.codec.ByteToMessageDecoder" classpath="deployment/result.jar"/>
+                    <available classname="io.netty.util.HashedWheelTimer" classpath="deployment/result.jar"/>
+                    <available classname="io.netty.handler.ssl.SslHandler" classpath="deployment/result.jar"/>
+                    <available classname="io.netty.resolver.AddressResolver" classpath="deployment/result.jar"/>
+                    <available classname="io.netty.channel.Channel" classpath="deployment/result.jar"/>
+                    <available classname="io.netty.channel.unix.DomainSocketAddress" classpath="deployment/result.jar"/>
+                </or>
+            </condition>
+        </fail>
+        <!-- No calling netty verification (no caller class) -->
+    </target>
+
+    <target name="verify" depends="verify-unmodified, verify-antlr, verify-bouncycastle, verify-commons-compress, verify-commons-io, verify-google, verify-icu, verify-netty"/>
 
 </project>
