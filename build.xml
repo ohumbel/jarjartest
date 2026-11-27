@@ -91,9 +91,10 @@
                 <pathelement path="lib/asm-util-9.11.1.jar" />
             </classpath>
         </taskdef>
-        <!-- produce a shadowed jar using jarjar -->
+        <!-- produce a shadowed jar using jarjar - rules may apply for multiple jars -->
         <jarjar destfile="deployment/result.jar" filesonly="true">
             <zipfileset src="deployment/stextreme.jar"/>
+            <!-- this is the initial jar - no direct repackaging rules -->
             <zipfileset src="lib/antlr-runtime-3.5.3.jar"/>
             <rule pattern="org.antlr.runtime.**" result="st.extreme.antlr.runtime.@1"/>
             <zipfileset src="lib/bcpkix-jdk18on-1.87.jar" excludes="META-INF/**"/>
@@ -103,7 +104,12 @@
             <rule pattern="org.apache.commons.compress.**" result="st.extreme.apache.commons.compress.@1"/>
             <zipfileset src="lib/commons-io-2.22.0.jar" excludes="META-INF/versions/9/module-info.class"/>
             <rule pattern="org.apache.commons.io.**" result="st.extreme.apache.commons.io.@1"/>
+            <zipfileset src="lib/failureaccess-1.0.3.jar" excludes="META-INF/**"/>
+            <!-- the com.google repackage rule also applies for failuraccess -->
+            <zipfileset src="lib/guava-33.8.0-jre.jar" excludes="META-INF/**"/>
+            <rule pattern="com.google.**" result="st.extreme.google.@1"/>
             <zipfileset src="lib/jline-4.7.0.jar"/>
+            <!-- no repackage rule for jline -->
         </jarjar>
     </target>
 
@@ -170,6 +176,7 @@
                 </or>
             </condition>
         </fail>
+        <!-- No calling bouncycastle verification (only a _sslcerts.py file in jython does the import) -->
     </target>
 
     <target name="verify-commons-compress" depends="jar-repackage">
@@ -234,7 +241,6 @@
         <verify-commons-io-caller jarfile="deployment/result.jar" classname="st.extreme.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream"/>
     </target>
 
-    <!-- No calling bouncycastle verification (only a _sslcerts.py file in jython does the import) -->
     <target name="verify" depends="verify-unmodified, verify-antlr, verify-bouncycastle, verify-commons-compress, verify-commons-io"/>
 
 </project>
