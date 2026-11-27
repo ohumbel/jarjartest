@@ -110,6 +110,15 @@
             <rule pattern="com.google.**" result="st.extreme.google.@1"/>
             <zipfileset src="lib/icu4j-79.1.jar"/>
             <rule pattern="com.ibm.icu.**" result="st.extreme.icu.@1"/>
+            <zipfileset src="lib/netty-buffer-4.2.21.Final.jar" excludes="META-INF/**"/>
+            <zipfileset src="lib/netty-codec-base-4.2.21.Final.jar" excludes="META-INF/**"/>
+            <zipfileset src="lib/netty-common-4.2.21.Final.jar" excludes="META-INF/**"/>
+            <zipfileset src="lib/netty-handler-4.2.21.Final.jar" excludes="META-INF/**"/>
+            <zipfileset src="lib/netty-resolver-4.2.21.Final.jar" excludes="META-INF/**"/>
+            <zipfileset src="lib/netty-transport-4.2.21.Final.jar" excludes="META-INF/**"/>
+            <zipfileset src="lib/netty-transport-native-unix-common-4.2.21.Final.jar" excludes="META-INF/**"/>
+            <!-- this repackage rule should applu for every netty jar -->
+            <rule pattern="io.netty.**" result="st.extreme.netty.@1"/>
             <zipfileset src="lib/jline-4.7.0.jar"/>
             <!-- no repackage rule for jline -->
         </jarjar>
